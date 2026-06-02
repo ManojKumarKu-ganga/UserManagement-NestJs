@@ -1,0 +1,58 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserDto {
+  age: Int!
+  email: String!
+  name: String!
+  password: String!
+  profilePhoto: Upload
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DeleteUserDto {
+  id: ID!
+}
+
+type Mutation {
+  createUser(input: CreateUserDto!): UserModel!
+  deleteUser(input: DeleteUserDto!): Boolean!
+  updateUser(input: UpdateUserDto!): UserModel!
+  uploadImage(file: Upload!): UploadResponse!
+}
+
+type Query {
+  user(id: String!): UserModel!
+  users: [UserModel!]!
+}
+
+input UpdateUserDto {
+  age: Int
+  email: String
+  id: ID!
+  name: String
+  password: String
+  profilePhoto: Upload
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type UploadResponse {
+  url: String!
+}
+
+type UserModel {
+  age: Int!
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  name: String!
+  profilePhoto: String
+  updatedAt: DateTime!
+}
