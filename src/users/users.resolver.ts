@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { UserModel } from './dto/user.model';
+import { UserModel } from './dto/models/user.model';
 import { CreateUserDto, UpdateUserDto, DeleteUserDto } from './dto/graphqlDto/user.dto';
-import { UploadResponse } from './dto/upload-response.model';
+import { UploadResponse } from './dto/models/upload-response.model';
 import { UploadScalar } from '../graphql/scalars/upload.scalar';
 import { UserInterface } from './interface/user.interface';
 
