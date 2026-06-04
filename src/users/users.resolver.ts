@@ -50,24 +50,27 @@ export class UsersResolver {
     @Args({ name: 'input', type: () => UpdateUserDto }) updateUserDto: UpdateUserDto,
   ) {
     const { id, name, email, password, age, profilePhoto } = updateUserDto;
-    const updateData: Partial<UserInterface> = {};
-    if (name) updateData.name = name;
-    if (email) updateData.email = email;
-    if (password) updateData.password = password;
-    if (age) updateData.age = age;
+    const updateData: Partial<UserInterface> = {
+      ...(name !== undefined && { name }),
+      ...(email !== undefined && { email }),
+      ...(password !== undefined && { password }),
+      ...(age !== undefined && { age }),
+    };
+
+
     const result = await this.usersService.update(id, updateData, profilePhoto);
     return result;
   }
 
 
 
-    @Mutation(() => Boolean)
-    async deleteUser(
-      @Args({ name: 'input', type: () => DeleteUserDto }) deleteUserDto: DeleteUserDto,
-    ) {
-      await this.usersService.remove(deleteUserDto.id);
-      return true;
-    }
+  @Mutation(() => Boolean)
+  async deleteUser(
+    @Args({ name: 'input', type: () => DeleteUserDto }) deleteUserDto: DeleteUserDto,
+  ) {
+    await this.usersService.remove(deleteUserDto.id);
+    return true;
+  }
 
 
 
