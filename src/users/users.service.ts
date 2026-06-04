@@ -100,8 +100,7 @@ async update(id: string, data: any, file?: UploadFile) {
 
     } catch (err) {
         console.error('UPDATE ERROR:', err.message); 
-
-       
+    
         if (err instanceof NotFoundException) throw err;
         if (err instanceof BadRequestException) throw err;
 

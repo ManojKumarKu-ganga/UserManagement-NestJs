@@ -40,14 +40,14 @@ export class UsersController {
     @UseInterceptors(FileInterceptor('profilePhoto', {
         storage: memoryStorage(),
     }))
-    
+
     async update(
         @Param('id') id: string,
         @Body() data: UpdateUserDto,
         @UploadedFile() file?: Express.Multer.File  
     ) {
-        console.log('BODY:', data);   
-        console.log('FILE:', file);
+      
+        
         return this.usersService.update(id, data, file);  
     }
 
