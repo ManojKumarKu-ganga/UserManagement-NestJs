@@ -34,7 +34,6 @@ export class CreateUserDto {
 
   @IsNumber()
   age!: number;
-
   @Field(() => UploadScalar, { nullable: true })
   @IsOptional()
   profilePhoto?: any;

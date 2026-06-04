@@ -18,7 +18,7 @@ export class UsersService {
         try {
             const existingUser = await this.userModel.findOne({ email: data.email });
             if (existingUser) {
-                throw new ConflictException('User already exists with this email');
+                throw new ConflictException ('User already exists with this email');
             }
 
             const userData = { ...data };
@@ -30,7 +30,7 @@ export class UsersService {
             return user
         } catch (error) {
 
-            if (error instanceof ConflictException) {
+            if (error instanceof ConflictException ) {
                 throw error;
             }
             if ( process.env.NODE_ENV === 'development'){
@@ -62,7 +62,6 @@ export class UsersService {
             if (!user) {
                 throw new NotFoundException('User not found');
             }
-
             return user;
         } catch (error) {
             if (error instanceof NotFoundException) {

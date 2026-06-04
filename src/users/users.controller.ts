@@ -40,6 +40,7 @@ export class UsersController {
     @UseInterceptors(FileInterceptor('profilePhoto', {
         storage: memoryStorage(),
     }))
+    
     async update(
         @Param('id') id: string,
         @Body() data: UpdateUserDto,
