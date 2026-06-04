@@ -1,15 +1,17 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { UserModel , UploadResponse } from './models/user.model';
+import { UserModel } from './models/user.model';
 import { CreateUserDto, UpdateUserDto, DeleteUserDto } from './dto/graphqlDto/user.dto';
-
 import { UploadScalar } from '../graphql/scalars/upload.scalar';
 import { UserInterface } from '../../interface/user.interface';
+import { UploadResponse } from '../file-storage/file-storage.model';
 
 
 @Resolver(() => UserModel)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) { }
+
+
 
   @Query(() => [UserModel])
   async users() {
@@ -17,11 +19,15 @@ export class UsersResolver {
     return result;
   }
 
+
+
   @Query(() => UserModel)
   async user(@Args('id') id: string) {
     const result = await this.usersService.findOne(id);
     return result;
   }
+
+
 
 
 
@@ -35,6 +41,7 @@ export class UsersResolver {
     const result = await this.usersService.create(dto, profilePhoto);
     return result;
   }
+
 
 
 
@@ -54,16 +61,14 @@ export class UsersResolver {
 
 
 
-  @Mutation(() => Boolean)
-  async deleteUser(
-    @Args({ name: 'input', type: () => DeleteUserDto }) deleteUserDto: DeleteUserDto,
-  ) {
-    await this.usersService.remove(deleteUserDto.id);
-    return true;
-  }
+    @Mutation(() => Boolean)
+    async deleteUser(
+      @Args({ name: 'input', type: () => DeleteUserDto }) deleteUserDto: DeleteUserDto,
+    ) {
+      await this.usersService.remove(deleteUserDto.id);
+      return true;
+    }
 
-
-  
 
 
   @Mutation(() => UploadResponse)

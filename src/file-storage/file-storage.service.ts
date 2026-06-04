@@ -18,7 +18,7 @@ export type UploadFile = Express.Multer.File | GraphQLUpload;
 @Injectable()
 export class FileStorageService {
   
-  private readonly uploadDir = join(process.cwd(), 'uploads', 'profiles');
+  private readonly uploadDir = join( process.cwd(), 'uploads', 'profiles' );
 
   async saveFile(file: UploadFile): Promise<string> {
     this.ensureUploadDir();

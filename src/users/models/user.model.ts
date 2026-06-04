@@ -24,9 +24,3 @@ export class UserModel {
   updatedAt!: Date;
 }
 
-
-@ObjectType()
-export class UploadResponse {
-  @Field()
-  url!: string;
-}

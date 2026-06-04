@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
 import { CreateUserDto } from "./dto/graphqlDto/user.dto";
-import { FileStorageService, UploadFile } from '../file-storage.service';
+import { FileStorageService, UploadFile } from '../file-storage/file-storage.service';
 
 @Injectable()
 export class UsersService {

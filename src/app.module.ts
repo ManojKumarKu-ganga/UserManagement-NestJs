@@ -7,6 +7,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UploadScalar } from './graphql/scalars/upload.scalar';
 import { config } from 'dotenv';
+import { FileStorageModule } from './file-storage/file-storage.module';
 
 
 config();
@@ -29,6 +30,7 @@ if (!mongoUri) {
       path: '/graphql' 
     }),
     UsersModule,
+    FileStorageModule,
   ],
   controllers: [AppController],
   providers: [AppService, UploadScalar],
