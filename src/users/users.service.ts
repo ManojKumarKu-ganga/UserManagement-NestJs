@@ -5,8 +5,6 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from "./dto/graphqlDto/user.dto";
 import { FileStorageService, UploadFile } from '../file-storage/file-storage.service';
 
-
-
 @Injectable()
 export class UsersService {
 
@@ -30,7 +28,12 @@ export class UsersService {
             }
 
             const user = await this.userModel.create(userData);
-            return user
+            return {
+                success: true,
+                message: 'User created successfully',
+                data: user
+            }
+            
         } catch (error) {
             console.error('Create User Error:', error);
             throw error;
