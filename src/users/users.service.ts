@@ -5,6 +5,8 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from "./dto/graphqlDto/user.dto";
 import { FileStorageService, UploadFile } from '../file-storage/file-storage.service';
 
+
+
 @Injectable()
 export class UsersService {
 
@@ -15,7 +17,7 @@ export class UsersService {
 
 
     async create(data: CreateUserDto, file?: UploadFile) {
-        try {
+        try { 
             const existingUser = await this.userModel.findOne({ email: data.email });
             if (existingUser) {
                 throw new ConflictException('User already exists with this email');
@@ -36,6 +38,8 @@ export class UsersService {
     }
 
 
+
+
     async findAll() {
         try {
             const users = await this.userModel.find();
@@ -47,6 +51,8 @@ export class UsersService {
             throw new InternalServerErrorException('Failed to fetch users');
         }
     }
+
+
 
 
 
@@ -64,6 +70,7 @@ export class UsersService {
             throw new InternalServerErrorException('Failed to fetch user');
         }
     }
+
 
 
 
@@ -104,6 +111,8 @@ export class UsersService {
     }
 
 
+
+
     async remove(id: string) {
         try {
             const removedUser = await this.userModel.findByIdAndDelete(id);
@@ -111,7 +120,11 @@ export class UsersService {
                 throw new NotFoundException('User not found');
             }
 
-            return removedUser;
+            return {
+                success: true,
+                message: 'User deleted successfully',
+                data: removedUser,
+            };
         } catch (err) {
             throw new InternalServerErrorException('Failed to delete user');
         }

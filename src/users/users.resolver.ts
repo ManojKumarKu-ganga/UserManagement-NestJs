@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 import { UserModel } from './models/user.model';
 import { CreateUserDto, UpdateUserDto, DeleteUserDto } from './dto/graphqlDto/user.dto';
 import { UploadScalar } from '../graphql/scalars/upload.scalar';
-import { UserInterface } from '../../interface/user.interface';
+import { UserInterface } from '../interface/user.interface';
 import { UploadResponse } from '../file-storage/file-storage.model';
 
 
