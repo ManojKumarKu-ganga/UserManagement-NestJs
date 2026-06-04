@@ -1,7 +1,6 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 @ObjectType()
-
 export class UserModel {
   @Field(() => ID)
   id!: string;
@@ -23,4 +22,11 @@ export class UserModel {
 
   @Field()
   updatedAt!: Date;
+}
+
+
+@ObjectType()
+export class UploadResponse {
+  @Field()
+  url!: string;
 }

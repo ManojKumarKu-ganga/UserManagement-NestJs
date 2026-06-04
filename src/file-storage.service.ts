@@ -17,6 +17,7 @@ export type UploadFile = Express.Multer.File | GraphQLUpload;
 
 @Injectable()
 export class FileStorageService {
+  
   private readonly uploadDir = join(process.cwd(), 'uploads', 'profiles');
 
   async saveFile(file: UploadFile): Promise<string> {
@@ -58,14 +59,21 @@ export class FileStorageService {
   }
 
   private buildFilename(originalName: string): string {
-    const safeName = originalName.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const name = originalName ?? `file-${Date.now()}`;
+    const safeName = name.replace(/[^a-zA-Z0-9.-]/g, '_');
     return `${Date.now()}-${safeName}`;
   }
 
   private getOriginalName(file: UploadFile): string {
-    if ('originalname' in file && file.originalname) {
-      return file.originalname;
+    if ('originalname' in file && (file as any).originalname) {
+      return (file as any).originalname;
     }
-    return file.filename;
+    if ('filename' in file && (file as any).filename) {
+      return (file as any).filename;
+    }
+    if ('name' in file && (file as any).name) {
+      return (file as any).name;
+    }
+    return `file-${Date.now()}`;
   }
 }

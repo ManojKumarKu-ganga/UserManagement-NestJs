@@ -13,31 +13,25 @@ export class UsersService {
         private readonly fileStorageService: FileStorageService,
     ) { }
 
-    
+
     async create(data: CreateUserDto, file?: UploadFile) {
         try {
             const existingUser = await this.userModel.findOne({ email: data.email });
             if (existingUser) {
-                throw new ConflictException ('User already exists with this email');
+                throw new ConflictException('User already exists with this email');
             }
 
             const userData = { ...data };
             if (file) {
-                userData.profilePhoto = await this.fileStorageService.saveFile(file);
+                const upload = (file && typeof (file as any).then === 'function') ? await (file as any) : file;
+                userData.profilePhoto = await this.fileStorageService.saveFile(upload);
             }
 
             const user = await this.userModel.create(userData);
             return user
         } catch (error) {
-
-            if (error instanceof ConflictException ) {
-                throw error;
-            }
-            if ( process.env.NODE_ENV === 'development'){
-                throw new InternalServerErrorException(`Failed to create user: ${error}`);
-            }
-
-            throw new InternalServerErrorException('Something went wrong');
+            console.error('Create User Error:', error);
+            throw error;
         }
     }
 
@@ -54,7 +48,7 @@ export class UsersService {
         }
     }
 
-    
+
 
     async findOne(id: string) {
         try {
@@ -73,40 +67,41 @@ export class UsersService {
 
 
 
-async update(id: string, data: any, file?: UploadFile) {
-    try {
-        const existingUser = await this.userModel.findById(id);
-        if (!existingUser) {
-            throw new NotFoundException('User not found');
-        }
-
-        // Clean undefined fields
-        const updateData = Object.fromEntries(
-            Object.entries(data).filter(([, value]) => value !== undefined)
-        );
-
-        if (file) {
-            if (existingUser.profilePhoto) {
-                await this.fileStorageService.deleteFile(existingUser.profilePhoto);
+    async update(id: string, data: any, file?: UploadFile) {
+        try {
+            const existingUser = await this.userModel.findById(id);
+            if (!existingUser) {
+                throw new NotFoundException('User not found');
             }
-            updateData.profilePhoto = await this.fileStorageService.saveFile(file);
+
+            // Clean undefined fields
+            const updateData = Object.fromEntries(
+                Object.entries(data).filter(([, value]) => value !== undefined)
+            );
+
+            if (file) {
+                if (existingUser.profilePhoto) {
+                    await this.fileStorageService.deleteFile(existingUser.profilePhoto);
+                }
+                const upload = (file && typeof (file as any).then === 'function') ? await (file as any) : file;
+                updateData.profilePhoto = await this.fileStorageService.saveFile(upload);
+            }
+
+            return await this.userModel.findByIdAndUpdate(
+                id,
+                updateData,
+                { new: true }
+            );
+
+        } catch (err) {
+            console.error('UPDATE ERROR:', err.message);
+
+            if (err instanceof NotFoundException) throw err;
+            if (err instanceof BadRequestException) throw err;
+
+            throw new InternalServerErrorException(`Failed to update user: ${err.message}`);
         }
-
-        return await this.userModel.findByIdAndUpdate(
-            id, 
-            updateData, 
-            { new: true }
-        );
-
-    } catch (err) {
-        console.error('UPDATE ERROR:', err.message); 
-    
-        if (err instanceof NotFoundException) throw err;
-        if (err instanceof BadRequestException) throw err;
-
-        throw new InternalServerErrorException(`Failed to update user: ${err.message}`);
     }
-}
 
 
     async remove(id: string) {
@@ -123,7 +118,8 @@ async update(id: string, data: any, file?: UploadFile) {
     }
 
     async saveFile(file: UploadFile): Promise<string> {
-        return this.fileStorageService.saveFile(file);
+        const upload = (file && typeof (file as any).then === 'function') ? await (file as any) : file;
+        return this.fileStorageService.saveFile(upload);
     }
 
 }
