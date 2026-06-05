@@ -15,7 +15,11 @@ import { FileStorageModule } from 'src/file-storage/file-storage.module';
     FileStorageModule
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersResolver]
+  providers: [UsersService, UsersResolver],
+    exports: [
+    UsersService,
+    MongooseModule,
+  ],
 })
 
 

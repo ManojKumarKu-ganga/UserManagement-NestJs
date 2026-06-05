@@ -6,15 +6,14 @@ import { UsersModule } from './users/users.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { UploadScalar } from './graphql/scalars/upload.scalar';
-
+import { ConfigModule } from '@nestjs/config';
 import { config } from 'dotenv';
 import { FileStorageModule } from './file-storage/file-storage.module';
+import { AuthModule } from './auth/auth.module';
 import appConfig from './config/app.config';
 config();
 
-
 const mongoUri = appConfig().database.uri;
-
 if (!mongoUri) {
   throw new Error('Missing required environment variable: MONGO_URI');
 }
@@ -31,9 +30,13 @@ if (!mongoUri) {
     }),
     UsersModule,
     FileStorageModule,
-   
+    AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [appConfig],
+    }),
   ],
-  
+
   controllers: [AppController],
   providers: [AppService, UploadScalar],
 })

@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from "./dto/common/create-user.dto";
 import { FileStorageService, UploadFile } from '../file-storage/file-storage.service';
 import { UpdateUserDto } from './dto/restapidto/update-user.dto';
+import bcrypt from 'bcryptjs'; 
 
 @Injectable()
 export class UsersService {
@@ -22,13 +23,17 @@ export class UsersService {
                 throw new ConflictException('User already exists with this email');
             }
 
-            const userData = { ...data };
+            const userData = { ...data ,
+                password: await bcrypt.hash(data.password, 10) 
+             };
+
             if (file) {
                 const upload = (file && typeof (file as any).then === 'function') ? await (file as any) : file;
                 userData.profilePhoto = await this.fileStorageService.saveFile(upload);
             }
-
             const user = await this.userModel.create(userData);
+        
+            console.log(user)
             return {
                 success: true,
                 message: 'User created successfully',
