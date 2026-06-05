@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, Injectable, InternalServerError
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
-import { CreateUserDto } from "./dto/common/create-user.dto";
+import { CreateUserDto } from "../common/dto/common/create-user.dto";
 import { FileStorageService, UploadFile } from '../file-storage/file-storage.service';
 import { UpdateUserDto } from './dto/restapidto/update-user.dto';
 import bcrypt from 'bcryptjs'; 
