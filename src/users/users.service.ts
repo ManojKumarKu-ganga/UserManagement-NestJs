@@ -1,9 +1,10 @@
-import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
-import { CreateUserDto } from "./dto/graphqlDto/user.dto";
+import { CreateUserDto } from "./dto/common/create-user.dto";
 import { FileStorageService, UploadFile } from '../file-storage/file-storage.service';
+import { UpdateUserDto } from './dto/restapidto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -33,10 +34,14 @@ export class UsersService {
                 message: 'User created successfully',
                 data: user
             }
-            
+
         } catch (error) {
             console.error('Create User Error:', error);
-            throw error;
+              if (error instanceof NotFoundException || error instanceof BadRequestException || error instanceof ConflictException || error instanceof HttpException ) {
+                throw error;
+            }
+            throw new InternalServerErrorException('Failed to create user')
+
         }
     }
 
@@ -48,7 +53,7 @@ export class UsersService {
             const users = await this.userModel.find();
             return users;
         } catch (error) {
-            if (error instanceof NotFoundException) {
+            if (error instanceof NotFoundException || error instanceof BadRequestException || error instanceof ConflictException || error instanceof HttpException ) {
                 throw error;
             }
             throw new InternalServerErrorException('Failed to fetch users');
@@ -67,7 +72,7 @@ export class UsersService {
             }
             return user;
         } catch (error) {
-            if (error instanceof NotFoundException) {
+            if (error instanceof NotFoundException || error instanceof BadRequestException || error instanceof ConflictException || error instanceof HttpException ) {
                 throw error;
             }
             throw new InternalServerErrorException('Failed to fetch user');
@@ -77,7 +82,7 @@ export class UsersService {
 
 
 
-    async update(id: string, data: any, file?: UploadFile) {
+    async update(id: string, data: UpdateUserDto, file?: UploadFile) {
         try {
             const existingUser = await this.userModel.findById(id);
             if (!existingUser) {
@@ -86,7 +91,7 @@ export class UsersService {
 
             // Clean undefined fields
             const updateData = Object.fromEntries(
-                Object.entries(data).filter(([, value]) => value !== undefined)
+                Object.entries(data).filter(([ value]) => value !== undefined)
             );
 
             if (file) {
@@ -106,8 +111,9 @@ export class UsersService {
         } catch (err) {
             console.error('UPDATE ERROR:', err.message);
 
-            if (err instanceof NotFoundException) throw err;
-            if (err instanceof BadRequestException) throw err;
+            if (err instanceof NotFoundException || err instanceof BadRequestException || err instanceof ConflictException || err instanceof HttpException ) {
+                throw err;
+            }
 
             throw new InternalServerErrorException(`Failed to update user: ${err.message}`);
         }
@@ -128,10 +134,16 @@ export class UsersService {
                 message: 'User deleted successfully',
                 data: removedUser,
             };
+            
         } catch (err) {
+            if (err instanceof NotFoundException || err instanceof BadRequestException || err instanceof ConflictException || err instanceof HttpException ) {
+                throw err;
+            }
             throw new InternalServerErrorException('Failed to delete user');
         }
     }
+
+
 
     async saveFile(file: UploadFile): Promise<string> {
         const upload = (file && typeof (file as any).then === 'function') ? await (file as any) : file;

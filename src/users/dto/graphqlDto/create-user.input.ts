@@ -1,4 +1,4 @@
-import { Field, ID, InputType, Int, PartialType ,} from '@nestjs/graphql';
+import { Field, InputType, Int ,} from '@nestjs/graphql';
 import {
   IsEmail,
   IsNotEmpty,
@@ -34,26 +34,9 @@ export class CreateUserDto {
 
   @IsNumber()
   age!: number;
+
+
   @Field(() => UploadScalar, { nullable: true })
   @IsOptional()
   profilePhoto?: any;
 }
-
-
-@InputType()
-export class UpdateUserDto extends PartialType(CreateUserDto) {
-  @Field(() => ID)
-  @IsNotEmpty()
-  @IsString()
-  id!: string;
-}
-
-@InputType()
-export class DeleteUserDto {
-  @Field(() => ID)
-  @IsNotEmpty()
-  id!: string;
-}
-
-
-

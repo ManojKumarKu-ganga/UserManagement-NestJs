@@ -1,7 +1,9 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { UserModel } from './models/user.model';
-import { CreateUserDto, UpdateUserDto, DeleteUserDto } from './dto/graphqlDto/user.dto';
+import { CreateUserDto } from './dto/graphqlDto/create-user.input';
+import { UpdateUserDto } from './dto/graphqlDto/update-user.input';
+import { DeleteUserDto } from './dto/graphqlDto/delete-user.input';
 import { UploadScalar } from '../graphql/scalars/upload.scalar';
 import { UserInterface } from '../interface/user.interface';
 import { UploadResponse } from '../file-storage/file-storage.model';
@@ -29,8 +31,6 @@ export class UsersResolver {
 
 
 
-
-
   @Mutation(() => UserModel)
   async createUser(
     @Args({ name: 'input', type: () => CreateUserDto }) createUserInput: CreateUserDto,
@@ -39,7 +39,7 @@ export class UsersResolver {
     const dto: CreateUserDto = { name, email, password, age } as CreateUserDto;
 
     const result = await this.usersService.create(dto, profilePhoto);
-    return result;
+    return result.data;
   }
 
 
@@ -56,7 +56,6 @@ export class UsersResolver {
       ...(password !== undefined && { password }),
       ...(age !== undefined && { age }),
     };
-
 
     const result = await this.usersService.update(id, updateData, profilePhoto);
     return result;

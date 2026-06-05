@@ -4,7 +4,6 @@ import { UsersService } from './users.service';
 import {MongooseModule} from '@nestjs/mongoose';
 import { UserSchema, User } from './schemas/user.schema';
 import { UsersResolver } from './users.resolver';
-import { FileStorageService } from '../file-storage/file-storage.service';
 import { FileStorageModule } from 'src/file-storage/file-storage.module';
 
 @Module({
@@ -16,7 +15,7 @@ import { FileStorageModule } from 'src/file-storage/file-storage.module';
     FileStorageModule
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersResolver, FileStorageService]
+  providers: [UsersService, UsersResolver]
 })
 
 

@@ -53,6 +53,7 @@ type UserModel {
   email: String!
   id: ID!
   name: String!
+  password: String!
   profilePhoto: String
   updatedAt: DateTime!
 }

@@ -2,9 +2,9 @@ import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, Uploa
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { UsersService } from './users.service';
-import * as fs from 'fs';
-import { CreateUserDto, UpdateUserDto } from './dto/restapidto/user.dto';
-
+import { UpdateUserDto } from './dto/restapidto/update-user.dto';
+import { CreateUserDto } from './dto/restapidto/create-user.dto';
+ 
 
 
 @Controller('users')
@@ -16,7 +16,7 @@ export class UsersController {
         storage: memoryStorage(),
     }))
     async create(
-        @Body() data: any,
+        @Body() data: CreateUserDto,
         @UploadedFile() file?: Express.Multer.File
     ) {
     

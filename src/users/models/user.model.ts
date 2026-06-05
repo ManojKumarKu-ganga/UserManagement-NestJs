@@ -14,6 +14,9 @@ export class UserModel {
   @Field(() => Int)
   age!: number;
 
+  @Field()
+  password!: string;
+
   @Field({ nullable: true })
   profilePhoto?: string;
 
