@@ -1,7 +1,7 @@
 // (for REST API)
 import { IsString, IsNotEmpty, IsEmail, IsNumber, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CreateUserDto as RestCreateUserDto } from '../../../common/dto/common/create-user.dto';
+import { CreateUserDto as RestCreateUserDto } from '../../../auth/dto/create-user.dto';
 
 export class CreateUserDto extends RestCreateUserDto {
 

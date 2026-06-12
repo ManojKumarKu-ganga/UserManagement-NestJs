@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { LoggingInterceptor } from './database/interceptors/logging.interceptor'
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 
 async function bootstrap() {
@@ -13,6 +14,7 @@ async function bootstrap() {
   }));
 
   app.use('/graphql', graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }));
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port, '0.0.0.0');

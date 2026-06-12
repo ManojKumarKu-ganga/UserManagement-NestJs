@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, UseInterceptors, UploadedFile, Patch } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/restapidto/update-user.dto';
 import { CreateUserDto } from './dto/restapidto/create-user.dto';
- 
+
 
 
 @Controller('users')
@@ -19,8 +19,8 @@ export class UsersController {
         @Body() data: CreateUserDto,
         @UploadedFile() file?: Express.Multer.File
     ) {
-    
-        return this.usersService.create(data,file);
+
+        return this.usersService.create(data, file);
     }
 
 
@@ -36,7 +36,7 @@ export class UsersController {
     }
 
 
-    @Put(':id')
+    @Patch(':id')
     @UseInterceptors(FileInterceptor('profilePhoto', {
         storage: memoryStorage(),
     }))
@@ -44,11 +44,11 @@ export class UsersController {
     async update(
         @Param('id') id: string,
         @Body() data: UpdateUserDto,
-        @UploadedFile() file?: Express.Multer.File  
+        @UploadedFile() file?: Express.Multer.File
     ) {
-      
-        
-        return this.usersService.update(id, data, file);  
+
+
+        return this.usersService.update(id, data, file);
     }
 
     @Delete(':id')
